@@ -1,0 +1,6 @@
+Der Linguist Larry Wall entwarf sie 1987 als Synthese aus C, awk, den
+UNIX-Befehlen und anderen Einflüssen. Ursprünglich als Werkzeug zur
+Verarbeitung und Manipulation von Textdateien insbesondere bei System- und
+Netzwerkadministration vorgesehen (zum Beispiel Auswertung von Logdateien),
+hat Perl auch bei der Entwicklung von Webanwendungen und in der
+Bioinformatik weite Verbreitung gefunden. 

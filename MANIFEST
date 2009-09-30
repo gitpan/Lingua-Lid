@@ -1,0 +1,15 @@
+Changes
+Lid.xs
+Makefile.PL
+MANIFEST
+LICENSE
+ppport.h
+README
+lib/Lingua/Lid.pm
+t/wikipedia_de_perl.txt
+t/wikipedia_en_perl.txt
+t/01_Lingua-Lid.t
+t/02_lid_version.t
+t/03_lid_ffile.t
+t/04_lid_fstr.t
+META.yml                                 Module meta-data (added by MakeMaker)

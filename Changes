@@ -1,0 +1,8 @@
+Revision history for the Perl extension Lingua::Lid.
+
+0.01  2009-09-30
+
+    * Initial version, developed using lid 2.0.2
+
+
+# vim: sw=4 sts=4 enc=utf-8 ai et ft=changelog

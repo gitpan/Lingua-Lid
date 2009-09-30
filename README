@@ -1,0 +1,45 @@
+Perl Extension "Lingua::Lid"
+============================
+
+The Perl extension "Lingua::Lid" provides a Perl interface to Lingua-Systems'
+language and character encoding identification library "lid".
+
+The interface is implemented using the XS language and makes the
+functionality of the "lid" C library functions available to Perl applications
+and modules in a simple to use way.
+
+
+INSTALLATION
+
+The build script will try to automatically determine the installation base
+path of the "lid" C library.
+
+In case you installed "lid" to a custom path, set the environment variable
+LID_BASE_DIR accordingly before running Makefile.PL.
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+
+DEPENDENCIES
+
+ * Perl (>= 5.8.0)
+ * lid  (>= 2.0.2)
+   The C library is currently available for Linux, Solaris and FreeBSD.
+   Have a look at:
+	http://www.lingua-systems.com/language-identifier/lid-library/
+ * C build environment (GCC recommended)
+
+
+COPYRIGHT AND LICENSE
+
+Copyright (C) 2009 Lingua-Systems Software GmbH
+
+This extension is free software. It may be used, redistributed and/or
+modified under the terms of the zlib license. For details, see the full text
+of the license in the file LICENSE.
+
