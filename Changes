@@ -1,8 +1,18 @@
 Revision history for the Perl extension Lingua::Lid.
 
+0.02  2010-06-18
+
+    * Added support for lid v3.x.x, prior versions are still supported
+    * Added thread support (requires lid v3.x.x)
+    * Added thread-safe replacement function Lingua::Lid::errstr() for the
+      $Lingua::Lid::errstr package variable
+    * Reworked $Lingua::Lid::errstr using Lingua::Lid::Errstr to be
+      thread-safe
+    * Added threaded tests
+
 0.01  2009-09-30
 
-    * Initial version, developed using lid 2.0.2
+    * Initial version, developed using lid v2.0.2
 
 
 # vim: sw=4 sts=4 enc=utf-8 ai et ft=changelog

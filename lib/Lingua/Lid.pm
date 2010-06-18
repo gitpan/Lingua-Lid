@@ -1,28 +1,30 @@
-#
-# Alex Linke, <alinke@lingua-systems.com>
-#
-# Copyright (C) 2009 Lingua-Systems Software GmbH
-#
-
 package Lingua::Lid;
+
+#
+# Alex Linke <alinke@lingua-systems.com>
+#
+# Copyright (C) 2009-2010 Lingua-Systems Software GmbH
+#
 
 use 5.008000;
 use strict;
-use warnings;
 
-require Exporter;
+use base 'Exporter';
 
-our @ISA = qw(Exporter);
+use Lingua::Lid::Errstr;
+
+
+our $VERSION = '0.02';
 
 
 our @EXPORT      = ();
-our %EXPORT_TAGS = ( 'all' => [ qw/lid_version lid_ffile lid_fstr/ ] );
+our %EXPORT_TAGS = ( 'all' => [ qw/lid_version lid_version_ct
+                                   lid_ffile lid_fstr/ ] );
 our @EXPORT_OK   = ( @{ $EXPORT_TAGS{'all'} } );
 
 
-our $VERSION = '0.01';
-
-our $errstr;
+# ...for backward compatibility
+tie our $errstr, 'Lingua::Lid::Errstr';
 
 
 require XSLoader;
@@ -48,6 +50,9 @@ Lingua::Lid - Interface to the language and encoding identifier "lid"
      
     # ...a plain text file
     $result = lid_ffile("/path/to/a/file.txt");
+    
+    # ...if $result is undef, an error occurred:
+    die Lingua::Lid::errstr() unless $result;
      
     print "Lingua::Lid v$Lingua::Lid::VERSION, using lid v",
         lid_version(), "\n";
@@ -62,6 +67,9 @@ required to build and use this extension.
 The interface is implemented using the XS language and makes the functionality
 of the B<lid> C library functions available to Perl applications and modules
 in a simple to use way.
+
+B<Lingua::Lid> is thread-safe an can be used my more than one thread
+simultaneously, if compiled with B<lid> v3.0.0 or above.
 
 This man page covers the usage of the B<Lingua::Lid> Perl extension only - for
 more information on B<lid> and a list on supported languages and character
@@ -83,6 +91,8 @@ export tag C<:all> may be used to import symbols for all provided functions:
   use Lingua::Lid qw/lid_ffile lid_fstr/; # or
   use Lingua::Lid qw/:all/;
 
+The function Lingua::Lid::errstr() is not exportable and has to be called
+with its full package name.
 
 =head1 FUNCTIONS
 
@@ -95,8 +105,8 @@ and encoding.
 It returns a hash reference containing the results. See
 S<IDENTIFICATION RESULTS DATA STRUCTURE> for details.
 
-If an error occurs, the function returns C<undef> and sets
-C<$Lingua::Lid::errstr> to an appropriate message describing the error.
+If an error occurs, the function returns C<undef>. Use Lingua::Lid::errstr()
+to obtain an appropriate message describing the error.
 
 =head2 lid_ffile( C<$file> )
 
@@ -106,13 +116,18 @@ This function takes a plain text C<$file>'s path as an argument and identifies
 its language and encoding.  It returns a hash reference containing the
 results. See S<IDENTIFICATION RESULTS DATA STRUCTURE> for details.
 
-If an error occurs, the function returns C<undef> and sets
-C<$Lingua::Lid::errstr> to an appropriate message describing the error.
+If an error occurs, the function returns C<undef>. Use Lingua::Lid::errstr()
+to obtain an appropriate message describing the error.
 
 =head2 lid_version( )
 
-This function returns the version of the underlying B<lid> C library.
+This function returns the version of the B<lid> C library that is currently
+loaded (I<runtime> version).
 
+=head2 lid_version_ct( )
+
+This function returns the version of the B<lid> C library that B<Lingua::Lid>
+has been compiled with (I<compile time> version).
 
 =head1 IDENTIFICATION RESULTS DATA STRUCTURE
 
@@ -146,9 +161,9 @@ The character encoding, i.e. "UTF-8", "ISO-8859-1", "UTF-32BE".
 
 =head1 ERROR HANDLING
 
-The functions lid_fstr() and lid_ffile() return C<undef> if an error occurs
-and set B<Lingua::Lid>'s package variable C<$errstr> (C<$Lingua::Lid::errstr>)
-to an appropriate message describing the error.
+The functions lid_fstr() and lid_ffile() return C<undef> if an error occurs.
+Lingua::Lid::errstr() can be used to obtain an appropriate message describing
+the last occurred error.
 
 Have a look at B<lid>'s manual for a list of all error messages.
 
@@ -156,11 +171,14 @@ Have a look at B<lid>'s manual for a list of all error messages.
 
 =item NOTE:
 
-The C<$Lingua::Lid::errstr> variable is reset to C<undef> whenever lid_fstr()
-or lid_ffile() are called.
+The C<$Lingua::Lid::errstr> variable is still supported and thread-safe, too.
+Internally it is tied to Lingua::Lid::errstr() using
+B<Lingua::Lid::Errstr>.
+However, as of B<Lingua::Lid> v0.02 Lingua::Lid::errstr() is preferred and
+should be used in any new code. C<$Lingua::Lid::errstr> may be removed in a
+future release.
 
 =back
-
 
 =head1 COMPARISON TO THE C INTERFACE
 
@@ -170,17 +188,20 @@ B<lid> counterparts in C.
 The C functions lid_fnstr() and lid_fwstr() are not needed, use the
 B<Lingua::Lid> function lid_fstr() in any Perl code instead.
 
-The C function lid_strerror() and the global C variable C<lid_errno> are not
-needed. Rather than returning a pointer to C<NULL>, B<Lingua::Lid>'s
-lid_fstr() and lid_ffile() return C<undef> on errors and set
-C<$Lingua::Lid::errstr> to an appropriate message describing the error.
+The C function lid_strerror() and the per-thread pseudo-variable C<lid_errno>
+are not needed. Rather than returning a pointer to C<NULL>, B<Lingua::Lid>'s
+lid_fstr() and lid_ffile() return C<undef> on errors.
+Lingua::Lid::errstr() can be used to obtain an appropriate message describing
+the last occurred error.
 
-The C define C<LID_VERSION> is not available in B<Lingua::Lid>, use
-lid_version() instead.
+B<lid>'s function lid_version_string() is available as lid_version() in
+B<Lingua::Lid>.
+
+The C defines C<LID_VERSION_STRING> (C<LID_VERSION> in lid v2.x.x) is not
+available in B<Lingua::Lid>, use lid_version_ct() instead.
 
 B<Lingua::Lid>'s results data structure sticks to the C C<lid_t *> structure
 as close as possible. See "IDENTIFICATION RESULTS DATA STRUCTURE" above.
-
 
 =head1 EXAMPLES
 
@@ -194,7 +215,7 @@ as close as possible. See "IDENTIFICATION RESULTS DATA STRUCTURE" above.
   (
       "This is a short English sentence.",
       "Dies ist ein kurzer deutscher Satz.",
-      "Too short."
+      " "
   );
    
   foreach my $string (@strings)
@@ -206,17 +227,16 @@ as close as possible. See "IDENTIFICATION RESULTS DATA STRUCTURE" above.
       }
       else
       {
-          print "lid_fstr() failed: $Lingua::Lid::errstr\n";
+          print "lid_fstr() failed: ", Lingua::Lid::errstr(), "\n";
       }
   }
 
 The program above produces the following output:
 
-  Lingua::Lid v0.01, using lid v2.0.2
+  Lingua::Lid v0.02, using lid v3.0.0
   English - eng - ASCII
   German - deu - ASCII
   lid_fstr() failed: Insufficient input length
-
 
 =head1 BUGS
 
@@ -249,12 +269,12 @@ B<lid>'s manual (available in English and German)
 
 =head1 AUTHOR
 
-Alex Linke, E<lt>alinke@lingua-systems.comE<gt>
+Alex Linke E<lt>alinke@lingua-systems.comE<gt>
 
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2009 Lingua-Systems Software GmbH
+Copyright (C) 2009-2010 Lingua-Systems Software GmbH
 
 This extension is free software. It may be used, redistributed and/or
 modified under the terms of the zlib license. For details, see the full text

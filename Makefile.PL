@@ -37,17 +37,17 @@ NOTICE
 ##
 ## Determine lid's installation path
 ##
-$BASE = "/opt/ls/"         if ($^O eq "linux" or $^O eq "solaris");
-$BASE = "/usr/local/"      if ($^O eq "freebsd");
+$BASE = "/opt/ls"          if ($^O eq "linux" or $^O eq "solaris");
+$BASE = "/usr/local"       if ($^O eq "freebsd");
 $BASE = $ENV{LID_BASE_DIR} if (defined $ENV{LID_BASE_DIR});
 
 
 ##
 ## Check the assumed directories exist and lid.h is located there
 ##
-die "$BASE/lib does not exist"          unless -d "$BASE/lib";
-die "$BASE/include does not exist"      unless -d "$BASE/include";
-die "lid.h is missing in $BASE/include" unless -e "$BASE/include/lid.h";
+lid_missing("$BASE/lib does not exist")      unless -d "$BASE/lib";
+lid_missing("$BASE/include does not exist")  unless -d "$BASE/include";
+lid_missing("lid.h not in $BASE/include")    unless -e "$BASE/include/lid.h";
 
 
 WriteMakefile(
@@ -60,6 +60,29 @@ WriteMakefile(
     DEFINE            => '',
     INC               => "-I$BASE/include",
 );
+
+
+sub lid_missing
+{
+    print STDERR <<NOT_FOUND;
+ERROR: $_[0]
+
+The lid C library could not be found beneath $BASE.
+
+If you already purchased a copy of lid and decided to install it to a non
+default location, set the LID_BASE_DIR environment variable to your
+installation's base directory:
+
+    env LID_BASE_DIR=/path/ perl Makefile.PL
+
+Otherwise, point your browser to lid's website for further information:
+
+    http://www.lingua-systems.com/language-identifier/lid-library/
+
+NOT_FOUND
+
+    exit(1);
+}
 
 
 # vim: sts=4 sw=4 enc=utf-8 ai et

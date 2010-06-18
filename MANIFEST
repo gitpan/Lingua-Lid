@@ -2,14 +2,19 @@ Changes
 Lid.xs
 Makefile.PL
 MANIFEST
+MANIFEST.SKIP
 LICENSE
 ppport.h
 README
 lib/Lingua/Lid.pm
+lib/Lingua/Lid/Errstr.pm
 t/wikipedia_de_perl.txt
 t/wikipedia_en_perl.txt
 t/01_Lingua-Lid.t
 t/02_lid_version.t
 t/03_lid_ffile.t
 t/04_lid_fstr.t
+t/05_errstr.t
+t/10_thr-lid_fstr.t
+t/11_thr-errstr.t
 META.yml                                 Module meta-data (added by MakeMaker)
