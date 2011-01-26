@@ -185,4 +185,4 @@ eval { lid_fstr() };
 # 32
 like($@, qr/^Usage:/, "Wrong usage #2: show usage");
 
-# vim: sts=4 sw=4 enc=utf-8 ai et ft=perl
+# vim: sts=4 sw=4 ai et ft=perl

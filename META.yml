@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Lingua-Lid
-version:             0.02
+version:             0.03
 abstract:            Interface to the language and encoding identifier "lid"
 license:             ~
 author:              

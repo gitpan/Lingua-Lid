@@ -1,5 +1,10 @@
 Revision history for the Perl extension Lingua::Lid.
 
+0.03  2011-01-26
+
+    * t/10_thr-lid_fstr.t, t/11_thr-errstr.t: Updated syntax to be
+      compatible with Perl's threads module v1.07 (Perl v5.8.8)
+
 0.02  2010-06-18
 
     * Added support for lid v3.x.x, prior versions are still supported
@@ -15,4 +20,4 @@ Revision history for the Perl extension Lingua::Lid.
     * Initial version, developed using lid v2.0.2
 
 
-# vim: sw=4 sts=4 enc=utf-8 ai et ft=changelog
+# vim: sw=4 sts=4 ai et ft=changelog

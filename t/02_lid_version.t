@@ -42,4 +42,4 @@ like($@, qr/^Usage:/,       "Wrong invocation: show usage");
 # 9
 is($v_rt, $v_ct,            "Compile time version == runtime version");
 
-# vim: sts=4 sw=4 enc=utf-8 ai et ft=perl
+# vim: sts=4 sw=4 ai et ft=perl

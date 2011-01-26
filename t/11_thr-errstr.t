@@ -1,7 +1,7 @@
 #
 # Alex Linke <alinke@lingua-systems.com>
 #
-# Copyright (c) 2010 Lingua-Systems Software GmbH
+# Copyright (c) 2010-2011 Lingua-Systems Software GmbH
 #
 
 use strict;
@@ -20,7 +20,7 @@ my @tests = (
 my $thr_each = 5;
 
 
-if ($Config{usethreads} && lid_version() =~ /^3\./)
+if ($Config{useithreads} && lid_version() =~ /^3\./)
 {
     require threads;
     require Time::HiRes;
@@ -30,14 +30,14 @@ if ($Config{usethreads} && lid_version() =~ /^3\./)
 else
 {
     plan skip_all => "$^X does not support threads"
-        unless $Config{usethreads};
+        unless $Config{useithreads};
     plan skip_all => "lid does not support threads in v" . lid_version();
 }
 
 
 foreach my $test (@tests)
 {
-    threads->create({ context => "SCALAR" }, sub {
+    my $scalar = threads->create( sub {
 
         my $res = {
             errstr_ok => $test->{errstr},
@@ -81,4 +81,4 @@ for my $t (threads->list())
 }
 
 
-# vim: sts=4 sw=4 enc=utf-8 ai et
+# vim: sts=4 sw=4 ai et

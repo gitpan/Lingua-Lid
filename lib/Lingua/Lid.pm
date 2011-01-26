@@ -3,7 +3,7 @@ package Lingua::Lid;
 #
 # Alex Linke <alinke@lingua-systems.com>
 #
-# Copyright (C) 2009-2010 Lingua-Systems Software GmbH
+# Copyright (C) 2009-2011 Lingua-Systems Software GmbH
 #
 
 use 5.008000;
@@ -14,7 +14,7 @@ use base 'Exporter';
 use Lingua::Lid::Errstr;
 
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 our @EXPORT      = ();
@@ -283,4 +283,4 @@ of the license in the file LICENSE.
 =cut
 
 
-# vim: sts=4 sw=4 enc=utf-8 ai et tw=78
+# vim: sts=4 sw=4 ai et tw=78

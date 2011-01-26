@@ -77,4 +77,4 @@ of the license in the file LICENSE.
 =cut
 
 
-# vim: sts=4 sw=4 enc=utf-8 et ai
+# vim: sts=4 sw=4 et ai

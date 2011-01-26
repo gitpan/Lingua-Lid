@@ -156,4 +156,4 @@ errstr()
         RETVAL
 
 
-# vim: sts=4 sw=4 enc=utf-8 ai et ft=xs
+# vim: sts=4 sw=4 ai et ft=xs
