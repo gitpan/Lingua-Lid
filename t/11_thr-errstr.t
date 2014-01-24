@@ -8,12 +8,17 @@ use strict;
 use warnings;
 use Test::More;
 use Config;
+use File::Basename qw/dirname/;
+use File::Spec;
 
 use Lingua::Lid qw/lid_ffile lid_version/;
 
+
+my $empty_txt = File::Spec->catfile(dirname($0), "empty.txt");
+
 my @tests = (
     { file => "/nonexistent.$$.txt", errstr => "Failed to open file" },
-    { file => "/dev/null",           errstr => "Insufficient input length" },
+    { file => $empty_txt,            errstr => "Insufficient input length" },
     { file => $^X,                   errstr => "Binary input data" },
     { file => $0,                    errstr => undef }
 );

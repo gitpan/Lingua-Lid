@@ -29,7 +29,6 @@ DEPENDENCIES
 
  * Perl (>= 5.8.0)
  * lid  (>= 2.0.2)
-   The C library is currently available for Linux, Solaris and FreeBSD.
    Have a look at:
 	http://www.lingua-systems.com/language-identifier/lid-library/
  * C build environment (GCC recommended)
@@ -37,9 +36,8 @@ DEPENDENCIES
 
 COPYRIGHT AND LICENSE
 
-Copyright (C) 2009-2011 Lingua-Systems Software GmbH
+Copyright (C) 2009-2014 Lingua-Systems Software GmbH
 
 This extension is free software. It may be used, redistributed and/or
 modified under the terms of the zlib license. For details, see the full text
 of the license in the file LICENSE.
-

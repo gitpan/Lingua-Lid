@@ -1,8 +1,6 @@
 /*
-    Alex Linke <alinke@lingua-systems.com>
-
-    Copyright (C) 2009-2010 Lingua-Systems Software GmbH
-*/
+ * Copyright (C) 2009-2014 Lingua-Systems Software GmbH
+ */
 
 
 #include "EXTERN.h"
@@ -156,4 +154,4 @@ errstr()
         RETVAL
 
 
-# vim: sts=4 sw=4 ai et ft=xs
+# vim: sts=4 sw=4 ts=4 ai et ft=xs

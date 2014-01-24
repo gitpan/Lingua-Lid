@@ -1,18 +1,23 @@
 #
 # Alex Linke <alinke@lingua-systems.com>
 #
-# Copyright (c) 2010 Lingua-Systems Software GmbH
+# Copyright (c) 2010-2011 Lingua-Systems Software GmbH
 #
 
 use strict;
 use warnings;
 use Test::More;
+use File::Basename qw/dirname/;
+use File::Spec;
 
 use Lingua::Lid qw/lid_ffile/;
 
+
+my $empty_txt = File::Spec->catfile(dirname($0), "empty.txt");
+
 my @tests = (
     { file => "/nonexistent.$$.txt", errstr => "Failed to open file" },
-    { file => "/dev/null",           errstr => "Insufficient input length" },
+    { file => $empty_txt,            errstr => "Insufficient input length" },
     { file => $^X,                   errstr => "Binary input data" },
     { file => $0,                    errstr => undef }
 );

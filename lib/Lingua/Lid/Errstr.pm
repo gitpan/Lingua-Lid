@@ -1,9 +1,7 @@
 package Lingua::Lid::Errstr;
 
 #
-# Alex Linke <alinke@lingua-systems.com>
-#
-# Copyright (c) 2010 by Lingua-Systems Software GmbH
+# Copyright (c) 2010-2014 by Lingua-Systems Software GmbH
 #
 
 use strict;
@@ -46,9 +44,9 @@ Lingua::Lid::Errstr - provides $Lingua::Lid::errstr
 =head1 SYNOPSIS
 
     use Lingua::Lid;
-     
+
     print $Lingua::Lid::errstr, "\n";
-     
+
     print Lingua::Lid::errstr(), "\n";  # preferred
 
 =head1 DESCRIPTION
@@ -68,7 +66,7 @@ Alex Linke E<lt>alinke@lingua-systems.comE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2010 Lingua-Systems Software GmbH
+Copyright (C) 2010-2014 Lingua-Systems Software GmbH
 
 This extension is free software. It may be used, redistributed and/or
 modified under the terms of the zlib license. For details, see the full text
@@ -77,4 +75,4 @@ of the license in the file LICENSE.
 =cut
 
 
-# vim: sts=4 sw=4 et ai
+# vim: sts=4 sw=4 ts=4 et ai

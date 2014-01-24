@@ -2,7 +2,8 @@ use 5.008000;
 use strict;
 use ExtUtils::MakeMaker;
 
-my $BASE;
+use File::Spec;
+use Config;
 
 
 ##
@@ -19,7 +20,7 @@ exit 0 if $ENV{AUTOMATED_TESTING};
 ##
 ## Check if the OS is supported by lid
 ##
-if ($^O ne "linux" && $^O ne "solaris" && $^O ne "freebsd")
+unless ( $^O =~ /^(linux|freebsd|solaris|mswin32)$/i )
 {
     print <<NOTICE;
 
@@ -35,45 +36,87 @@ NOTICE
 
 
 ##
-## Determine lid's installation path
+## Determine lid installation information
 ##
-$BASE = "/opt/ls"          if ($^O eq "linux" or $^O eq "solaris");
-$BASE = "/usr/local"       if ($^O eq "freebsd");
-$BASE = $ENV{LID_BASE_DIR} if (defined $ENV{LID_BASE_DIR});
+my %lid = locate_lid();
 
-
-##
-## Check the assumed directories exist and lid.h is located there
-##
-lid_missing("$BASE/lib does not exist")      unless -d "$BASE/lib";
-lid_missing("$BASE/include does not exist")  unless -d "$BASE/include";
-lid_missing("lid.h not in $BASE/include")    unless -e "$BASE/include/lid.h";
-
-
-WriteMakefile(
-    NAME              => 'Lingua::Lid',
-    VERSION_FROM      => 'lib/Lingua/Lid.pm',
-    PREREQ_PM         => {},
-    ABSTRACT_FROM     => 'lib/Lingua/Lid.pm',
-    AUTHOR            => 'Alex Linke <alinke@lingua-systems.com>',
-    LIBS              => ["-L$BASE/lib -llid"],
-    DEFINE            => '',
-    INC               => "-I$BASE/include",
+my %flags = (
+    lib => $Config{ccname} eq "cl" ? "" : "-L$lid{lib_dir} -llid",
+    obj => $Config{ccname} eq "cl" ? "$lid{lib_dir}\\lid.lib" : "",
+    inc => "-I$lid{inc_dir}"
 );
 
 
-sub lid_missing
-{
-    print STDERR <<NOT_FOUND;
-ERROR: $_[0]
+my %extra_flags = ();
 
-The lid C library could not be found beneath $BASE.
+if ( $^O eq "MSWin32" )
+{
+    # Workaround for shared library name clashes on Win32
+    $extra_flags{DLEXT} = "xs.$Config{dlext}";
+}
+
+
+WriteMakefile(
+    NAME          => 'Lingua::Lid',
+    VERSION_FROM  => 'lib/Lingua/Lid.pm',
+    PREREQ_PM     => {},
+    ABSTRACT_FROM => 'lib/Lingua/Lid.pm',
+    AUTHOR        => 'Alex Linke <alinke@lingua-systems.com>',
+    DEFINE        => '',
+    OBJECT        => "Lid$Config{_o} $flags{obj}",
+    LIBS          => [ $flags{lib} ],
+    INC           => $flags{inc},
+    %extra_flags
+);
+
+
+sub locate_lid
+{
+    my $arch_libdir = $Config{archname} =~ /64(?!int)/ ? "lib64" : "lib";
+    my $lib_prefix  = $^O eq "MSWin32" ? "" : "lib";
+
+    my @bases = $^O eq "MSWin32" ?
+                    ( 'C:\\lid' )  :
+                    ( '/usr', '/usr/local', '/opt/ls' );
+
+
+    unshift @bases, $ENV{LID_BASE_DIR} if defined $ENV{LID_BASE_DIR};
+
+
+    foreach my $base (@bases)
+    {
+        my %i = (
+            lib_dir => File::Spec->catfile( $base, $arch_libdir ),
+            lib     => File::Spec->catfile(
+                        $base, $arch_libdir, "${lib_prefix}lid.$Config{dlext}"
+                       ),
+            inc_dir => File::Spec->catfile( $base, "include" ),
+            inc     => File::Spec->catfile( $base, "include", "lid.h" )
+        );
+
+        if ( -f $i{lib} && -f $i{inc} )
+        {
+            print "lid found beneath $base.\n";
+            return %i;
+        }
+    }
+
+
+    print STDERR <<NOT_FOUND;
+
+The lid C library could not be found.
+
+Tried: @bases
 
 If you already purchased a copy of lid and decided to install it to a non
-default location, set the LID_BASE_DIR environment variable to your
-installation's base directory:
+default location, set the LID_BASE_DIR environment variable to point to
+your installation's base directory and rerun Makefile.PL:
 
-    env LID_BASE_DIR=/path/ perl Makefile.PL
+    export LID_BASE_DIR=/path/           (Unix, sh)
+    setenv LID_BASE_DIR /path/           (Unix, csh)
+    set    LID_BASE_DIR=C:\\path          (Win32)
+
+    perl Makefile.PL
 
 Otherwise, point your browser to lid's website for further information:
 
@@ -85,4 +128,4 @@ NOT_FOUND
 }
 
 
-# vim: sts=4 sw=4 ai et
+# vim: sts=4 sw=4 ts=4 ai et

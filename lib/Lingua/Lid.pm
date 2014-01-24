@@ -1,20 +1,21 @@
 package Lingua::Lid;
 
 #
-# Alex Linke <alinke@lingua-systems.com>
-#
-# Copyright (C) 2009-2011 Lingua-Systems Software GmbH
+# Copyright (C) 2009-2014 Lingua-Systems Software GmbH
 #
 
 use 5.008000;
 use strict;
 
-use base 'Exporter';
+require Exporter;
+require DynaLoader;
+
+our @ISA = qw/DynaLoader Exporter/;
 
 use Lingua::Lid::Errstr;
 
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 
 our @EXPORT      = ();
@@ -27,8 +28,11 @@ our @EXPORT_OK   = ( @{ $EXPORT_TAGS{'all'} } );
 tie our $errstr, 'Lingua::Lid::Errstr';
 
 
-require XSLoader;
-XSLoader::load('Lingua::Lid', $VERSION);
+# Workaround for shared library name clashes on Win32
+local $DynaLoader::dl_dlext = "xs.$DynaLoader::dl_dlext" if $^O eq "MSWin32";
+
+
+bootstrap Lingua::Lid;
 
 
 1;
@@ -42,18 +46,18 @@ Lingua::Lid - Interface to the language and encoding identifier "lid"
 =head1 SYNOPSIS
 
     use Lingua::Lid qw/:all/;
-     
+
     # Identify the language and character encoding of...
-     
+
     # ...a string
     $result = lid_fstr("This is a short English sentence.");
-     
+
     # ...a plain text file
     $result = lid_ffile("/path/to/a/file.txt");
-    
+
     # ...if $result is undef, an error occurred:
     die Lingua::Lid::errstr() unless $result;
-     
+
     print "Lingua::Lid v$Lingua::Lid::VERSION, using lid v",
         lid_version(), "\n";
 
@@ -207,17 +211,17 @@ as close as possible. See "IDENTIFICATION RESULTS DATA STRUCTURE" above.
 
   use strict;
   use Lingua::Lid qw/lid_fstr lid_version/;
-   
+
   print "Lingua::Lid v$Lingua::Lid::VERSION, using lid v",
     lid_version(), "\n";
-   
+
   my @strings =
   (
       "This is a short English sentence.",
       "Dies ist ein kurzer deutscher Satz.",
       " "
   );
-   
+
   foreach my $string (@strings)
   {
       if (my $r = lid_fstr($string))
@@ -274,7 +278,7 @@ Alex Linke E<lt>alinke@lingua-systems.comE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2009-2010 Lingua-Systems Software GmbH
+Copyright (C) 2009-2014 Lingua-Systems Software GmbH
 
 This extension is free software. It may be used, redistributed and/or
 modified under the terms of the zlib license. For details, see the full text
@@ -283,4 +287,4 @@ of the license in the file LICENSE.
 =cut
 
 
-# vim: sts=4 sw=4 ai et tw=78
+# vim: sts=4 sw=4 ts=4 ai et tw=78

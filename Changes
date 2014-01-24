@@ -1,5 +1,11 @@
 Revision history for the Perl extension Lingua::Lid.
 
+0.04  2014-01-24
+
+    * Makefile.PL: Improved lid library detection
+    * lib/Lingua/Lid.pm: Use DynaLoader instead of XSLoader
+    * Added support for MS Windows
+
 0.03  2011-01-26
 
     * t/10_thr-lid_fstr.t, t/11_thr-errstr.t: Updated syntax to be

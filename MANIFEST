@@ -10,6 +10,7 @@ lib/Lingua/Lid.pm
 lib/Lingua/Lid/Errstr.pm
 t/wikipedia_de_perl.txt
 t/wikipedia_en_perl.txt
+t/empty.txt
 t/01_Lingua-Lid.t
 t/02_lid_version.t
 t/03_lid_ffile.t
